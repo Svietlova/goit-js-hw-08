@@ -66,3 +66,31 @@ const images = [
  },
 ];
 
+const gallery = document.querySelector('.gallery');
+
+const createGallery = images
+    .map(({ preview, original, description }) =>
+      `<li class="gallery-item">
+        <a class="gallery-link" href="${original}" onclick="event.preventDefault()">
+          <img
+            class="gallery-image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}" />
+        </a>
+      </li>
+    `)
+    .join('');
+gallery.insertAdjacentHTML('beforeend', createGallery);
+    
+gallery.addEventListener('click', (event) => {
+  if (event.target.classList.contains('gallery-image')) {
+    event.preventDefault();
+    const dataSource = event.target.getAttribute('data-source');
+    const description = event.target.getAttribute('alt');
+    basicLightbox.create(`<div class="modalWindow">
+                                <img src="${dataSource}" alt="${description}" width="900" height="530" />
+                              </div>`)
+      .show();
+  };
+});
